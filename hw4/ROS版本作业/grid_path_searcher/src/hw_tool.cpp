@@ -128,10 +128,18 @@ double Homeworktool::OptimalBVP(Eigen::Vector3d _start_position,Eigen::Vector3d 
 
 
     */
-    //假设T=5s;
-   
-    optimal_cost =fun_cost(10.0,_start_position,_start_velocity,_target_position);
-    cout<<optimal_cost<<"------------------------------"<<endl;
+    //遍历求取最小值(jiejiejie);
+    double T;
+    for(double t=0.01;t<10;t=t+0.01)
+    {
+        double cost =fun_cost(t,_start_position,_start_velocity,_target_position);
+        if(optimal_cost>cost)
+        {
+            optimal_cost=cost;
+            T=t;
+        }
+    }
+    cout<<optimal_cost<<"------------------------------"<<T<<endl;
 
     return optimal_cost;
 }
