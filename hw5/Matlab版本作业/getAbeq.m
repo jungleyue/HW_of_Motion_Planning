@@ -1,14 +1,10 @@
 function [Aeq beq]= getAbeq(n_seg, n_order, waypoints, ts, start_cond, end_cond)
     n_all_poly = n_seg*(n_order+1);
+    
     %#####################################################
     % p,v,a,j constraint in start, 
     Aeq_start = zeros(4, n_all_poly);
-    beq_start = zeros(4, 1);
-    % STEP 2.1: write expression of Aeq_start and beq_start
-    %
-    %
-    %
-    %
+    % STEP 2.1: write expression of Aeq_start and beq_start 
     Aeq_start(1,1)=1;
     Aeq_start(2,2)=1;
     Aeq_start(3,3)=2;
@@ -18,7 +14,6 @@ function [Aeq beq]= getAbeq(n_seg, n_order, waypoints, ts, start_cond, end_cond)
     %#####################################################
     % p,v,a constraint in end
     Aeq_end = zeros(4, n_all_poly);
-    beq_end = zeros(4, 1);
     % STEP 2.2: write expression of Aeq_end and beq_end
     tt=ts(n_seg);
     for i=1:4
@@ -27,6 +22,7 @@ function [Aeq beq]= getAbeq(n_seg, n_order, waypoints, ts, start_cond, end_cond)
         end
     end
     beq_end =end_cond';
+    
     %#####################################################
     % position constrain in all middle waypoints
     Aeq_wp = zeros(n_seg-1, n_all_poly);
@@ -49,13 +45,12 @@ function [Aeq beq]= getAbeq(n_seg, n_order, waypoints, ts, start_cond, end_cond)
         Aeq_con_p(i,i*(n_order+1)+1)=-1;
     end
     
-    
     %#####################################################
     % velocity continuity constrain between each 2 segments
     Aeq_con_v = zeros(n_seg-1, n_all_poly);
     beq_con_v = zeros(n_seg-1, 1);
     % STEP 2.5: write expression of Aeq_con_v and beq_con_v
-    %
+
     for i=1:n_seg-1
         for j=2:n_order+1
             Aeq_con_v(i,(i-1)*(n_order+1)+j)=ts(i)^(j-2)*(j-1);
@@ -68,28 +63,25 @@ function [Aeq beq]= getAbeq(n_seg, n_order, waypoints, ts, start_cond, end_cond)
     Aeq_con_a = zeros(n_seg-1, n_all_poly);
     beq_con_a = zeros(n_seg-1, 1);
     % STEP 2.6: write expression of Aeq_con_a and beq_con_a
-    %
-    %
-    %
-    %
     for i=1:n_seg-1
         for j=3:n_order+1
             Aeq_con_a(i,(i-1)*(n_order+1)+j)=ts(i)^(j-3)*(j-1)*(j-2);
         end
         Aeq_con_a(i,i*(n_order+1)+3)=-1*2;
     end
+    
     %#####################################################
     % jerk continuity constrain between each 2 segments
     Aeq_con_j = zeros(n_seg-1, n_all_poly);
     beq_con_j = zeros(n_seg-1, 1);
     % STEP 2.7: write expression of Aeq_con_j and beq_con_j
-    
     for i=1:n_seg-1
         for j=4:n_order+1
             Aeq_con_j(i,(i-1)*(n_order+1)+j)=ts(i)^(j-4)*(j-1)*(j-2)*(j-3);
         end
         Aeq_con_j(i,i*(n_order+1)+4)=-1*2*3;
     end
+    
     %#####################################################
     % combine all components to form Aeq and beq   
     Aeq_con = [Aeq_con_p; Aeq_con_v; Aeq_con_a; Aeq_con_j];
