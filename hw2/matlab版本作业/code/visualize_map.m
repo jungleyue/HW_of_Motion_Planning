@@ -19,9 +19,11 @@ function visualize_map(map,path)
 	scatter(map(size(map, 1), 1)-0.5, map(size(map, 1), 2)-0.5, 'r','*');
     hold on;
     %optimal path
-    for path_cnt = 2:size(path,1)-1
-        scatter(path(path_cnt,1),path(path_cnt,2),'b');
-        hold on;
+    if(size(path,1)>3)
+        for path_cnt = 2:size(path,1)-1
+            scatter(path(path_cnt,1),path(path_cnt,2),'b');
+            hold on;
+        end
     end
 
 end

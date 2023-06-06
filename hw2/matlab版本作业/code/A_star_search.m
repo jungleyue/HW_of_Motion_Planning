@@ -85,11 +85,14 @@ function path = A_star_search(map,MAX_X,MAX_Y)
                 OPEN_COUNT=OPEN_COUNT+1;
                 OPEN(OPEN_COUNT,:)=insert_open(exp_array(i,1),exp_array(i,2),xNode,yNode,exp_array(i,3),exp_array(i,4),exp_array(i,5));
                 if(exp_array(i,1)==xTarget && exp_array(i,2)==yTarget)
-                    NoPath=0
+                    NoPath=0;
                 end
             end
         end
         i_min = min_fn(OPEN,OPEN_COUNT,xTarget,yTarget);
+        if(i_min<0)
+            break;
+        end
         xNode = OPEN(i_min,2);
         yNode = OPEN(i_min,3);
         OPEN(i_min,1)=0;
@@ -115,7 +118,7 @@ function path = A_star_search(map,MAX_X,MAX_Y)
    path(1,2)=yTarget;
    if(NoPath==0)
        i=2;
-       while(xNode~= xStart && yNode~= yStart)
+       while(xNode~= xStart || yNode~= yStart)
            n_index = node_index(OPEN,xNode,yNode);
            path(i,1)=OPEN(n_index,4)-X_offset-0.5;
            path(i,2)=OPEN(n_index,5)-Y_offset-0.5;
