@@ -76,7 +76,6 @@ function poly_coef = MinimumSnapCloseformSolver(waypoints, ts, n_seg, n_order)
     for i=1:n_seg-1
        dF(4+i)= waypoints(1+i);
     end
-
     dP = -inv(R_pp) * R_fp' * dF;
     poly_coef = inv(M) * Ct * [dF;dP];
 end
